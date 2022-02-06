@@ -8,7 +8,7 @@ public class King extends Piece {
 
 	@Override
 	public boolean isValidMove(int x, int y) {
-		return (x != this.x || y != this.y) && Math.abs(x - this.x) <= 1 && Math.abs(y - this.y) <= 1;
+		return super.isValidMove(x, y) && (x != this.x || y != this.y) && Math.abs(x - this.x) <= 1 && Math.abs(y - this.y) <= 1;
 	}
 
 }

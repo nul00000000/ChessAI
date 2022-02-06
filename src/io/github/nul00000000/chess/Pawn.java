@@ -8,8 +8,15 @@ public class Pawn extends Piece {
 
 	@Override
 	public boolean isValidMove(int x, int y) {
-//		int ty = white ? y - 1 : y + 1;
-		return ((white && y == this.y - 1) || (!white && y == this.y + 1)) && Math.abs(this.x - x) <= 1;
+		int t = white ? -1 : 1;
+		if(y != this.y + t || Math.abs(this.x - x) > 1) {
+			return false;
+		}
+		if(x == this.x) {
+			return board.getPieceAt(x, y) == null;
+		} else {
+			return board.getPieceAt(x, y) != null;
+		}
 	}
 
 }

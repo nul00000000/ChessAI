@@ -21,7 +21,10 @@ public abstract class Piece {
 		this.taken = false;
 	}
 	
-	public abstract boolean isValidMove(int x, int y);
+	public boolean isValidMove(int x, int y) {
+		Piece p = board.getPieceAt(x, y);
+		return p == null || (p.white != this.white);
+	}
 	
 	public void draw(Graphics2D g) {
 		if(!taken) {
@@ -31,7 +34,7 @@ public abstract class Piece {
 			if(white) {
 				g.drawRect(board.x + x * board.tileWidth + board.tileWidth / 8, board.y + y * board.tileHeight + board.tileHeight / 8, board.tileWidth * 3 / 4, board.tileHeight * 3 / 4);
 			}
-			g.drawString(dName, board.x + x * board.tileWidth + board.tileWidth / 4, board.y + y * board.tileHeight + board.tileHeight * 13 / 16);
+			g.drawString(dName, board.x + x * board.tileWidth + board.tileWidth * 5 / 16, board.y + y * board.tileHeight + board.tileHeight * 11 / 16);
 		}
 	}
 

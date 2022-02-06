@@ -10,7 +10,7 @@ public class Knight extends Piece {
 	public boolean isValidMove(int x, int y) {
 		int nx = Math.abs(x - this.x);
 		int ny = Math.abs(y - this.y);
-		return nx + ny == 3 && (nx != 0 && ny != 0);
+		return super.isValidMove(x, y) && nx + ny == 3 && (nx != 0 && ny != 0);
 	}
 
 }

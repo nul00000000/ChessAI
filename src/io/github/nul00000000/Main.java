@@ -43,7 +43,7 @@ public class Main extends JPanel implements Runnable {
 		b = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = b.createGraphics();
 		g.setStroke(new BasicStroke(4.0f));
-		g.setFont(new Font("Consolas", Font.PLAIN, 80));
+		g.setFont(new Font("Consolas", Font.PLAIN, 60));
 		
 		this.world = new World(seed);
 	}
