@@ -122,7 +122,7 @@ public class Chess {
 	public boolean checkCheckCheck(Piece p, int x, int y, boolean doIfAllowed) {
 		int px = p.x;
 		int py = p.y;
-		Piece o;
+		Piece o = null;
 		if(p.isValidMove(x, y)) {
 			o = this.getPieceAt(x, y);
 			if(o != null) {
@@ -134,19 +134,18 @@ public class Chess {
 			return false;
 		}
 		checkCheck();
-		if(!doIfAllowed) {
+		boolean r = !((p.white && whiteCheck) || (!p.white && blackCheck));
+		if(!doIfAllowed || !r) {
 			p.x = px;
 			p.y = py;
 			if(o != null) {
 				o.taken = false;
 			}
 		}
-		return !((p.white && whiteCheck) || (!p.white && blackCheck));
+		return r;
 	}
 	
 	public void update() {
-		checkCheck();
-		calculateMap();
 		bx = (Input.mouseX - x) * 8 / width;
 		by = (Input.mouseY - y) * 8 / width;
 		if(Input.jButtons.contains(Input.LEFT_CLICK)) {
@@ -158,6 +157,8 @@ public class Chess {
 		}
 		if(Input.jButtons.contains(Input.RIGHT_CLICK) && selected != null) {
 			checkCheckCheck(selected, bx, by, true);
+			checkCheck();
+			calculateMap();
 		}
 	}
 	
@@ -166,7 +167,7 @@ public class Chess {
 			for(int j = 0; j < 8; j++) {
 				g.setColor((i + j) % 2 == 0 ? LIGHT : DARK);
 				g.fillRect(i * tileWidth, j * tileHeight, tileWidth, tileHeight);
-				if(selected != null && checkCheckCheck(selected, i, j, false)) {
+				if(selected != null && selected.isValidMove(i, j)/* && checkCheckCheck(selected, i, j, false)*/) {
 					g.setColor(Color.GREEN.darker());
 					g.drawRect(i * tileWidth + 2, j * tileHeight + 2, tileWidth - 4, tileHeight - 4);
 				}
