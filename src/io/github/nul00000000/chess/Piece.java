@@ -11,6 +11,7 @@ public abstract class Piece {
 	protected final Chess board;
 	private String dName;
 	public boolean taken;
+	public boolean hasMoved = false;
 	
 	public Piece(int x, int y, boolean white, String dName, Chess board) {
 		this.x = x;
