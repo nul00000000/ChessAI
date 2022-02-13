@@ -9,7 +9,7 @@ public class Pawn extends Piece {
 	@Override
 	public boolean isValidMove(int x, int y) {
 		int t = white ? -1 : 1;
-		if((hasMoved && y != this.y + t) || Math.abs(this.x - x) > 1) {
+		if((y != this.y + t || Math.abs(this.x - x) > 1) && (hasMoved || (y != this.y + t * 2 || x != this.x))) {
 			return false;
 		}
 		if(x == this.x) {

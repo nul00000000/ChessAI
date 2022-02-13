@@ -104,7 +104,6 @@ public class Chess {
 		return true;
 	}
 	
-	//chex mix :)
 	public void checkCheck() {
 		whiteCheck = false;
 		blackCheck = false;
@@ -118,8 +117,6 @@ public class Chess {
 		}
 	}
 	
-	
-	//checks chex mix
 	public boolean checkCheckCheck(Piece p, int x, int y, boolean doIfAllowed) {
 		int px = p.x;
 		int py = p.y;
@@ -174,7 +171,7 @@ public class Chess {
 			for(int j = 0; j < 8; j++) {
 				g.setColor((i + j) % 2 == 0 ? LIGHT : DARK);
 				g.fillRect(i * tileWidth, j * tileHeight, tileWidth, tileHeight);
-				if(selected != null && checkCheckCheck(selected, i, j, false)) {
+				if(selected != null && (selected.white == whiteTurn) && checkCheckCheck(selected, i, j, false)) {
 					g.setColor(Color.GREEN.darker());
 					g.drawRect(i * tileWidth + 2, j * tileHeight + 2, tileWidth - 4, tileHeight - 4);
 				}
@@ -183,7 +180,12 @@ public class Chess {
 		g.setColor(Color.BLUE.darker());
 		g.drawRect(bx * tileWidth, by * tileHeight, tileWidth, tileHeight);
 		for(Piece p : pieces) {
-			p.draw(g);
+			if(p != selected || !Input.buttons.contains(Input.LEFT_CLICK)) {
+				p.draw(g);
+			}
+		}
+		if(Input.buttons.contains(Input.LEFT_CLICK)) {
+			selected.draw(g, Input.mouseX, Input.mouseY);
 		}
 	}
 

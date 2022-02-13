@@ -38,5 +38,17 @@ public abstract class Piece {
 			g.drawString(dName, board.x + x * board.tileWidth + board.tileWidth * 5 / 16, board.y + y * board.tileHeight + board.tileHeight * 11 / 16);
 		}
 	}
+	
+	public void draw(Graphics2D g, int cx, int cy) {
+		if(!taken) {
+			g.setColor(white ? Color.WHITE : Color.BLACK);
+			g.fillRect(cx - board.tileWidth * 3 / 8, cy - board.tileHeight * 3 / 8, board.tileWidth * 3 / 4, board.tileHeight * 3 / 4);
+			g.setColor(white ? Color.BLACK : Color.WHITE);
+			if(white) {
+				g.drawRect(cx - board.tileWidth * 3 / 8, cy - board.tileHeight * 3 / 8, board.tileWidth * 3 / 4, board.tileHeight * 3 / 4);
+			}
+			g.drawString(dName, cx + board.tileWidth * 5 / 16 - board.tileWidth / 2, cy + board.tileHeight * 11 / 16 - board.tileHeight / 2);
+		}
+	}
 
 }
