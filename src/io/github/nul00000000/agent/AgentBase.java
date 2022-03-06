@@ -3,19 +3,21 @@ package io.github.nul00000000.agent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import io.github.nul00000000.chess.Chess;
+
 public abstract class AgentBase {
 	
 	private double score;
-	protected double x, y;
-	protected double dx, dy;
-	protected double angle;
+	private Chess chess;
+	private int x1, y1, x2, y2;
 	
-	public AgentBase(double x, double y, double angle) {
+	public AgentBase(Chess chess) {
 		this.score = 0;
-		this.x = x;
-		this.y = y;
-		this.dx = 0;
-		this.dy = 0;
+		this.chess = chess;
+	}
+	
+	public void setChess(Chess chess) {
+		this.chess = chess;
 	}
 	
 	public double getScore() {
@@ -30,19 +32,19 @@ public abstract class AgentBase {
 		score = 0;
 	}
 	
-	public abstract void act();
-	
-	public void update() {
-		act();
-		x += dx;
-		y += dy;
-		dx *= 0.9;
-		dy *= 0.9;
+	protected void move(int x1, int y1, int x2, int y2) {
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		chess.move(x1, y1, x2, y2);
 	}
+	
+	public abstract void act();
 	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.RED);
-		g.fillOval((int) x - 10, (int) y - 10, 20, 20);
+		g.drawLine(x1 * chess.tileWidth + chess.tileWidth / 2, y1 * chess.tileHeight + chess.tileHeight / 2, x2 * chess.tileWidth + chess.tileWidth / 2, y2 * chess.tileHeight + chess.tileHeight / 2);
 	}
 
 }

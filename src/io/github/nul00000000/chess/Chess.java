@@ -33,6 +33,8 @@ public class Chess {
 	private King whiteKing;
 	private King blackKing;
 	
+	private int winStatus = 0;
+	
 	private boolean whiteTurn = true;
 	
 	public Chess(int x, int y, int width, int height) {
@@ -117,19 +119,29 @@ public class Chess {
 		}
 	}
 	
-	public boolean checkCheckCheck(Piece p, int x, int y, boolean doIfAllowed) {
+	/**
+	 * 
+	 * @param p
+	 * @param x
+	 * @param y
+	 * @param doIfAllowed
+	 * @return -1 if move is not allowed, 0 if it is allowed, 1 if a piece is taken
+	 */
+	public int checkCheckCheck(Piece p, int x, int y, boolean doIfAllowed) {
+		boolean pieceTaken = false;
 		int px = p.x;
 		int py = p.y;
 		Piece o = null;
 		if(p.isValidMove(x, y)) {
 			o = this.getPieceAt(x, y);
 			if(o != null) {
+				pieceTaken = true;
 				o.taken = true;
 			}
 			p.x = x;
 			p.y = y;
 		} else {
-			return false;
+			return -1;
 		}
 		calculateMap();
 		checkCheck();
@@ -141,8 +153,39 @@ public class Chess {
 				o.taken = false;
 			}
 			calculateMap();
+			checkCheck();
 		}
-		return r;
+		return r ? (pieceTaken ? 1 : 0) : -1;
+	}
+	
+	//returns true if either is in checkmate
+	public boolean checkCheckmate() {
+		for(Piece p : pieces) {
+			if(p.white == whiteTurn) {
+				for(int i = 0; i < 8; i++) {
+					for(int j = 0; j < 8; j++) {
+						if(checkCheckCheck(p, i, j, false) != -1) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	public int move(int x1, int y1, int x2, int y2) {
+		Piece p = this.getPieceAt(x1, y1);
+		if(p == null || p.white != whiteTurn) {
+			return -2;
+		}
+		int a = checkCheckCheck(p, x2, y2, true);
+		//there can only be one check at the end of a turn, so just check for either and reward that extra
+		if(a != -1 && (whiteCheck || blackCheck)) {
+			return 2;
+		} else {
+			return a;
+		}
 	}
 		
 	public void update() {
@@ -152,18 +195,17 @@ public class Chess {
 			for(Piece p : pieces) {
 				if(p.x == bx && p.y == by && !p.taken) {
 					selected = p;
-				}
+				} 
 			}
 		}
-		if(Input.jUpButtons.contains(Input.LEFT_CLICK) && selected != null && (selected.white == whiteTurn) && !(selected.x == bx && selected.y == by)) {
-			boolean a = checkCheckCheck(selected, bx, by, true);
-			if(a) {
-				whiteTurn = !whiteTurn;
-				selected.hasMoved = true;
-			}
-			calculateMap();
-			checkCheck();
-		}
+		
+//		if(Input.jUpButtons.contains(Input.LEFT_CLICK) && selected != null && (selected.white == whiteTurn) && !(selected.x == bx && selected.y == by)) {
+//			boolean a = checkCheckCheck(selected, bx, by, true);
+//			if(a) {
+//				whiteTurn = !whiteTurn;
+//				selected.hasMoved = true;
+//			}
+//		}
 	}
 	
 	public void draw(Graphics2D g) {
@@ -171,7 +213,7 @@ public class Chess {
 			for(int j = 0; j < 8; j++) {
 				g.setColor((i + j) % 2 == 0 ? LIGHT : DARK);
 				g.fillRect(i * tileWidth, j * tileHeight, tileWidth, tileHeight);
-				if(selected != null && (selected.white == whiteTurn) && checkCheckCheck(selected, i, j, false)) {
+				if(selected != null && (selected.white == whiteTurn) && (checkCheckCheck(selected, i, j, false) != -1)) {
 					g.setColor(Color.GREEN.darker());
 					g.drawRect(i * tileWidth + 2, j * tileHeight + 2, tileWidth - 4, tileHeight - 4);
 				}

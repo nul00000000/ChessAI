@@ -14,14 +14,14 @@ public class World {
 	public Agent[] agents;
 	public HashMap<Species, ArrayList<Agent>> species;
 	private Random random;
-	private PlayerAgent player;
+	//private PlayerAgent player;
 	
 	private Chess chess;
 	
 	public World(long seed) {
 		species = new HashMap<>();
 		this.random = new Random(seed);
-		this.player = new PlayerAgent();
+		//this.player = new PlayerAgent();
 		this.chess = new Chess(0, 0, Main.WIDTH, Main.HEIGHT);
 	}
 	
@@ -31,7 +31,7 @@ public class World {
 			if(!species.containsKey(a.getSpecies())) {
 				species.put(a.getSpecies(), new ArrayList<>());
 			}
-			species.get(a.getSpecies()).add(a);
+			species.get(a.getSpecies()).add(a); 
 		}
 	}
 	
